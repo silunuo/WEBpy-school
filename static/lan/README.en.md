@@ -2,7 +2,7 @@
 <h1>Flask-Requests-SQL\XSS-CH</h1>
 Web Crawler & Vulnerability Detection Automation System<br><br>
 
-![LOGO](./static/img/SUNb.png)
+![LOGO](./img/SUNb.png)
 
 [**English**](./static/lan/README.en.md) | [**中文简体**](./README.md) 
 
@@ -82,4 +82,4 @@ python app.py
 ```
 
 ## Special Thanks
-+ learning documentation from HelloFlask https://github.com/greyli/helloflask.git
++ learning documentation from HelloFlask | https://github.com/greyli/helloflask.git
