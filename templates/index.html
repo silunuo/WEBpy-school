@@ -1,0 +1,79 @@
+<!--
+  ~ Copyright (c) 2025. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
+  ~ author:lwl
+  ~ Collaborator:cr and lx and tyf
+  -->
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>网页爬虫与漏洞检测自动化系统</title>
+    <link href="{{url_for('static',filename='./css/style.css')}}" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="header">
+        <img src="{{url_for('static',filename='./img/SUNc.png')}}">
+        <h1>漏洞检测爬虫平台</h1>
+        <a class="log-link" href="/logs">查看扫描日志</a>
+    </div>
+
+    <form action="/start_crawl" method="POST">
+        <input name="url" placeholder="请输入目标网址，例如 https://example.com" required type="text">
+        <button type="submit">开始爬取</button>
+    </form>
+
+    <h2 style="text-align: center;">已爬取链接列表</h2>
+    <ul>
+        {% for u in urls %}
+        <li>
+            <div class="url-info">
+                <div class="url-id">{{ u.id }}</div>
+                <div class="url-meta">
+                    <div class="url-text">{{ u.url }}</div>
+                    <div class="url-details">
+                        <span class="crawl-time">爬取时间: {{ u.crawled_at }}</span>
+                        {% if u.scan_date %}
+                            <span class="scan-time">XSS检测: {{ u.scan_date }}</span>
+                            {% if "未发现" in u.xss_scan_result %}
+                                <span class="xss-status safe">安全</span>
+                            {% else %}
+                                <span class="xss-status detected">存在漏洞</span>
+                            {% endif %}
+                        {% endif %}
+                        {% if u.sql_scan_date %}
+                            <span class="scan-time">SQL检测: {{ u.sql_scan_date }}</span>
+                            {% if "未发现" in u.sql_scan_result %}
+                                <span class="sql-status safe">安全</span>
+                            {% else %}
+                                <span class="sql-status detected">存在漏洞</span>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="url-actions">
+                <form action="/scan_xss" method="POST">
+                    <input name="target_url" type="hidden" value="{{ u.url }}">
+                    <input name="url_id" type="hidden" value="{{ u.id }}">
+                    <button class="xss-button" type="submit">检测XSS</button>
+                </form>
+                <form action="/scan_sql" method="POST">
+                    <input name="target_url" type="hidden" value="{{ u.url }}">
+                    <input name="url_id" type="hidden" value="{{ u.id }}">
+                    <button class="sql-button" type="submit">检测SQL</button>
+                </form>
+                <form action="/delete_url" method="POST">
+                    <input name="url_id" type="hidden" value="{{ u.id }}">
+                    <button class="delete-button" type="submit">删除</button>
+                </form>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!--
+  ~ Copyright (c) 2025. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
+  ~ author:lwl
+  ~ Collaborator:cr and lx and tyf
+  -->
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>扫描结果</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='./css/style.css')}}">
+</head>
+<body>
+    <div class="header">
+        <img src="{{url_for('static',filename='./img/SUNc.png')}}">
+        <h1>{{ scan_type|default('漏洞') }}扫描结果</h1>
+        <a href="/" class="log-link">返回首页</a>
+    </div>
+
+    <div class="result-container">
+        <h2>扫描URL: <span class="scanned-url">{{ url }}</span></h2>
+
+        <div class="result-box">
+            <h3>检测结果:</h3>
+            <pre>{{ result }}</pre>
+        </div>
+
+        <div class="recent-scans">
+            <h3>最近扫描记录:</h3>
+            <ul>
+                {% for scan in recent_scans %}
+                <li>
+                    <div class="scan-url">{{ scan.url }}</div>
+                    <div class="scan-time">
+                        {% if scan.scan_date %}
+                            XSS: {{ scan.scan_date }}
+                        {% endif %}
+                        {% if scan.sql_scan_date %}
+                            SQL: {{ scan.sql_scan_date }}
+                        {% endif %}
+                    </div>
+                    <div class="scan-result">
+                        {% if scan.is_xss_detected %}
+                            <span class="xss-status detected">XSS漏洞</span>
+                        {% elif scan.is_sql_detected %}
+                            <span class="sql-status detected">SQL漏洞</span>
+                        {% else %}
+                            <span class="status safe">安全</span>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="actions">
+            <a href="/" class="action-button">继续扫描</a>
+            <a href="/logs" class="action-button">查看完整日志</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,5 @@
+beautifulsoup4==4.13.4
+Flask==3.1.1
+PyMySQL==1.1.1
+Requests==2.32.2
+#适当低版本亦可运行，兼容性良好

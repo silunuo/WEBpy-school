@@ -1,0 +1,100 @@
+<!--
+  ~ Copyright (c) 2025. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
+  ~ author:lwl
+  ~ Collaborator:cr and lx and tyf
+  -->
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>扫描日志</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='./css/style.css')}}">
+</head>
+<body>
+    <div class="header">
+        <img src="{{url_for('static',filename='./img/SUNc.png')}}">
+        <h1>扫描日志</h1>
+        <a href="/" class="log-link">返回首页</a>
+    </div>
+
+    <div class="logs-container">
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="xss">XSS扫描</button>
+            <button class="filter-btn" data-filter="sql">SQL注入扫描</button>
+        </div>
+
+        <table id="logs-table">
+            <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>类型</th>
+                    <th>URL</th>
+                    <th>结果摘要</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr class="log-row" data-type="{{ log.scan_type|default('xss') }}">
+                    <td>{{ log.scan_date }}</td>
+                    <td class="log-type">
+                        {% if log.scan_type == 'sql' %}
+                            SQL注入
+                        {% else %}
+                            XSS
+                        {% endif %}
+                    </td>
+                    <td class="log-url">{{ log.url }}</td>
+                    <td class="log-result">
+                        {{ log.scan_result.split('\n')[0] }}
+                    </td>
+                    <td>
+                        {% if "未发现" in log.scan_result %}
+                            <span class="status safe">安全</span>
+                        {% else %}
+                            <span class="status detected">存在漏洞</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // 更新按钮状态
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                button.classList.add('active');
+
+                // 过滤日志
+                const filter = button.dataset.filter;
+                const rows = document.querySelectorAll('.log-row');
+
+                rows.forEach(row => {
+                    if (filter === 'all') {
+                        row.style.display = '';
+                    } else {
+                        if (filter === 'all' || row.querySelector('.log-type').textContent.trim() === (filter === 'xss' ? 'XSS' : 'SQL注入')) { //👇
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+<!--if (row.dataset.type === filter)  -->
