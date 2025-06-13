@@ -3,7 +3,7 @@
 #  Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
 #  Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
 #  Vestibulum commodo. Ut rhoncus gravida arcu.
-#  author:lwl
+#  author:silunuo
 #  Collaborator:cr and lx and tyf
 import pymysql
 ###请修改这里的个人数据库信息再使用！！！！！
