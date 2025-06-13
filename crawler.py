@@ -3,9 +3,8 @@
 #  Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
 #  Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
 #  Vestibulum commodo. Ut rhoncus gravida arcu.
-#  author:lwl
+#  author:silunuo
 #  Collaborator:cr and lx and tyf
-
 
 import requests
 from bs4 import BeautifulSoup
